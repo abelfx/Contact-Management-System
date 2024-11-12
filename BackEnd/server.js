@@ -1,3 +1,4 @@
+// basic imports for backEnd functionality
 require("dotenv").config();
 
 const express = require("express");
@@ -8,7 +9,6 @@ const UserBase = require("./model/user.js");
 const cors = require("cors");
 
 const { ObjectId } = require("mongodb");
-
 const app = express();
 
 app.use(cors());
@@ -27,7 +27,7 @@ app.get("/home", (req, res) => {
     });
 });
 
-// output the contacts info based on persons ID
+// output all the avaliable contacts
 app.get("/contacts", async (req, res) => {
   try {
     const contact = await DataBase.find({});
@@ -42,6 +42,8 @@ app.get("/contacts", async (req, res) => {
     res.status(501);
   }
 });
+
+// used to get detailed information about the contact
 app.get("/contacts/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -60,8 +62,7 @@ app.get("/contacts/:id", async (req, res) => {
   }
 });
 
-// renders the signup page
-
+// signup
 app.post("/signup", async (req, res) => {
   try {
     const { fullname, username, password, confirmpassword } = req.body;
@@ -93,6 +94,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// login 
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -116,8 +118,8 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// renders the add contact page
 
+// adds contact to the database
 app.post("/addContact", async (req, res) => {
   try {
     const { fullName, phoneNumber, email, notes } = req.body;
