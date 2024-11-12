@@ -1,0 +1,41 @@
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+    "fullname": "Abel Tesfa",
+    "username": "abbebe",
+    "password": "123456",
+    "confirmpassword": "123456"
+}
+
+###
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "username": "abelat",
+    "password": "123456"
+}
+
+###
+
+GET http://localhost:3000/Login
+
+###
+GET http://localhost:3000/home
+
+###
+
+POST http://localhost:3000/addContact
+Content-Type: application/json
+
+{
+    "fullName": "Abel Tesfa",
+    "phoneNumber": "1234567890",
+    "email": "codshf@gmaij.com",
+    "notes": "wohoo"
+}
+
+###
+DELETE  http://localhost:3000/delete/670cff69f74ab6c85217111e
