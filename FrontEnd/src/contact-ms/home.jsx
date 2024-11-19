@@ -21,9 +21,7 @@ const home = () => {
     notes: "",
   });
 
-  // related the contac ID from Mongo DB with the ID on the UI
-  // will be used for deletion/searching and other purposes
-  // currently not functional since I am not sure what collection to use- maybe a hash-map
+  const [cDelete, setCdelete] = useState(false);
 
   // number of contacts counter
   const [contactNumber, setCNumber] = useState(0);
@@ -39,6 +37,10 @@ const home = () => {
 
   const toggleFunctionality = () => {
     setVisible(!visible);
+  };
+
+  const cDeleteFunctionality = () => {
+    setCdelete(!cDelete);
   };
 
   const addContacts = async (e) => {
@@ -74,15 +76,21 @@ const home = () => {
       data.forEach((contact) => {
         const row = document.createElement("tr");
         row.classList.add("border-b"); // Add a bottom border to rows for better styling
+
+        row.setAttribute("data-id", contact._id);
+
         row.innerHTML = `
-        
         <td class="border px-4 py-2">${count++}</td>
-        <td class="border px-4 py-2" data-id = ${console.log(contact._id)}>${
-          contact.FullName
-        }</td>
+        <td class="border px-4 py-2">${contact.FullName}</td>
         <td class="border px-4 py-2">${contact.PhoneNumber}</td>
         <td class="border px-4 py-2">${contact.Email}</td>
-        <td class="border px-4 py-2">${contact.Notes} </td>
+        <td class="border px-4 py-2 relative group">
+          ${contact.Notes}
+          <!-- Place the Delete button inside the Notes column -->
+          <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm" onclick="deleteContact('${
+            contact._id
+          }')">D</button>
+        </td>
       `;
         tableBody.appendChild(row);
       });
@@ -94,21 +102,6 @@ const home = () => {
   };
 
   displayContacts();
-
-  // contact deleting function / currently not functional
-  const deleteContact = async () => {
-    const res = await fetch(`http://localhost:3000/delete/`, {
-      method: "DELETE",
-    });
-
-    const data = await res.json();
-
-    if (data.status === "deleted") {
-      toast.success("Contact Deleted!");
-    } else {
-      toast.error("Its my its not you, try again!");
-    }
-  };
 
   const deleteAccount = async () => {
     Swal.fire({
@@ -473,7 +466,7 @@ const home = () => {
         <h1 className="text-black font-bold text-2xl text-center m-4">
           Delete Contact
         </h1>
-        <form action="">
+        <form>
           <input
             type="text"
             className="input w-full mb-3 bg-blue-100"
@@ -486,6 +479,20 @@ const home = () => {
             Delete
           </button>
         </form>
+      </div>
+
+      {/*this is the Account Setting part of the page......it is not functional */}
+      <div
+        id="account-setting"
+        className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 border border-black shadow-lg  p-10 ${
+          deleteVisible ? "block" : "hidden"
+        }`}
+      >
+        <AiOutlineClose
+          className="absolute top-3 right-3 text-2xl text-black hover:bg-red-200"
+          onClick={deletefunctionality}
+        />
+        <p>it is time for africa</p>
       </div>
     </div>
   );
