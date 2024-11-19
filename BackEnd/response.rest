@@ -38,7 +38,16 @@ Content-Type: application/json
 }
 
 ###
-DELETE  http://localhost:3000/delete/67326422f3b32783fdf45f7f
+DELETE  http://localhost:3000/delete/67342cc3eddc86d154995678
 
 ### 
 GET http://localhost:3000/contacts
+
+###
+
+POST http://localhost:3000/contact/search
+Content-Type: application/json
+
+{
+    "name": "Abel Tesfa Awel"
+}

@@ -94,7 +94,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// login 
+// login
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -117,7 +117,6 @@ app.post("/login", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 // adds contact to the database
 app.post("/addContact", async (req, res) => {
@@ -183,6 +182,35 @@ app.delete("/delete/:id", async (req, res) => {
   }
 });
 
+// search contacts functionality
+app.post("/contact/search", async (req, res) => {
+  try {
+    const name = req.body.name.toLowerCase();
+
+    const contact = await DataBase.aggregate([
+      {
+        $addFields: {
+          lowerFullName: { $toLower: "$FullName" },
+        },
+      },
+      {
+        $match: {
+          lowerFullName: name,
+        },
+      },
+    ]);
+
+    if (contact.length > 0) {
+      return res.status(201).json(contact);
+    }
+
+    return res.status(401).json({ error: "Contact not found" });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// server listener
 app.listen(3000, (err) => {
   if (err) return console.log(err);
   console.log("listening on port 3000...");

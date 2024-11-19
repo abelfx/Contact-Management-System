@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import logoutHandler from "../hooks/logoutHandler.js";
 import {
-  AiOutlineDown,
   AiOutlineSearch,
   AiOutlineClose,
   AiOutlineLogout,
@@ -31,7 +30,12 @@ const home = () => {
   let count = 1;
 
   const navigate = useNavigate();
+
+  // sets the visibility of the add contact right page
   const [visible, setVisible] = useState(false);
+
+  // sets the visibillity of the delete functionality
+  const [deleteVisible, setDeleteVisible] = useState(false);
 
   const toggleFunctionality = () => {
     setVisible(!visible);
@@ -121,8 +125,13 @@ const home = () => {
       }
     });
   };
+
+  // toggle button which makes the delete window appear
+  const deletefunctionality = () => {
+    setDeleteVisible(!deleteVisible);
+  };
   return (
-    <div id="main" className="relative bg-gray-300 h-screen">
+    <div id="main" className="flex relative bg-gray-300 h-screen">
       {/* Left Sidebar */}
       <div
         id="left"
@@ -277,18 +286,31 @@ const home = () => {
           </div>
 
           <div className="pl-12 mt-5 text-blue-600 font-bold">
-            <ul className="flex gap-10">
-              <li className="flex items-center">
-                Contact person <AiOutlineDown size={12} />
+            <ul className="menu menu-horizontal">
+              <li>
+                <details>
+                  <summary>Last Activity</summary>
+                </details>
               </li>
-              <li className="flex items-center">
-                Create Date <AiOutlineDown size={12} />
+              <li>
+                <details>
+                  <summary>Fav Person</summary>
+                </details>
               </li>
-              <li className="flex items-center">
-                Last Activity <AiOutlineDown size={12} />
+              <li>
+                <details>
+                  <summary>Status</summary>
+                </details>
               </li>
-              <li className="flex items-center">
-                Status <AiOutlineDown size={12} />
+              <li>
+                <details>
+                  <summary>Contact Person</summary>
+                  <ul>
+                    <li>
+                      <input type="text" placeholder="name/Id" />
+                    </li>
+                  </ul>
+                </details>
               </li>
             </ul>
           </div>
@@ -301,14 +323,21 @@ const home = () => {
               <input
                 type="text"
                 placeholder="search name, phone"
-                className="bg-gray-100 border border-gray-400 p-1 pl-8 rounded-sm"
+                className=" input bg-gray-100 border border-gray-400 p-1 pl-8 rounded-lg"
               />
               <AiOutlineSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-blue-500 font-bold" />
               <button
                 onClick={toggleFunctionality}
-                className="ml-5 text-blue-500 font-bold hover:text-blue-600"
+                className="ml-5 text-blue-500 font-bold hover:text-blue-600 bg-blue-100 p-2 rounded-md border border-gray-300 "
               >
                 Add Contact
+              </button>
+
+              <button
+                onClick={deletefunctionality}
+                className="ml-5 text-red-500 font-bold hover:text-red-600 bg-red-100 p-2 rounded-md border border-gray-300 absolute right-0"
+              >
+                Delete Contact
               </button>
             </div>
 
@@ -429,6 +458,34 @@ const home = () => {
             </form>
           </div>
         </div>
+      </div>
+
+      <div
+        id="delete"
+        className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 border border-black shadow-lg  p-10 ${
+          deleteVisible ? "block" : "hidden"
+        }`}
+      >
+        <AiOutlineClose
+          className="absolute top-3 right-3 text-2xl text-black hover:bg-red-200"
+          onClick={deletefunctionality}
+        />
+        <h1 className="text-black font-bold text-2xl text-center m-4">
+          Delete Contact
+        </h1>
+        <form action="">
+          <input
+            type="text"
+            className="input w-full mb-3 bg-blue-100"
+            placeholder="Enter Contact ID"
+          />
+          <button
+            className="delete btn bg-red-500 border-none hover:bg-red-600 text-white w-full"
+            type="submit"
+          >
+            Delete
+          </button>
+        </form>
       </div>
     </div>
   );
