@@ -101,6 +101,26 @@ const home = () => {
     }
   };
 
+  const deleteAllContacts = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:3000/delete", {
+        method: "delete",
+      });
+
+      const data = await res.json();
+
+      if (data.message === "Deleted") {
+        toast.success("Contacts Deleted Successfully");
+        displayContacts();
+      } else {
+        toast.error("failure to delete contacts");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   displayContacts();
 
   const deleteAccount = async () => {
@@ -464,13 +484,13 @@ const home = () => {
           onClick={deletefunctionality}
         />
         <h1 className="text-black font-bold text-2xl text-center m-4">
-          Delete Contact
+          Delete All Contacts?
         </h1>
-        <form>
+        <form onSubmit={deleteAllContacts}>
           <input
             type="text"
             className="input w-full mb-3 bg-blue-100"
-            placeholder="Enter Contact ID"
+            placeholder="write Delete "
           />
           <button
             className="delete btn bg-red-500 border-none hover:bg-red-600 text-white w-full"
@@ -482,7 +502,7 @@ const home = () => {
       </div>
 
       {/*this is the Account Setting part of the page......it is not functional */}
-      <div
+      {/* <div
         id="account-setting"
         className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 border border-black shadow-lg  p-10 ${
           deleteVisible ? "block" : "hidden"
@@ -493,7 +513,7 @@ const home = () => {
           onClick={deletefunctionality}
         />
         <p>it is time for africa</p>
-      </div>
+      </div> */}
     </div>
   );
 };

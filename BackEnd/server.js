@@ -210,6 +210,17 @@ app.post("/contact/search", async (req, res) => {
   }
 });
 
+// delete all contacts
+
+app.delete("/delete", async (req, res) => {
+  try {
+    await DataBase.deleteMany({});
+    return res.status(201).json({ message: "Deleted" });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // server listener
 app.listen(3000, (err) => {
   if (err) return console.log(err);
