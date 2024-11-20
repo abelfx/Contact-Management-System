@@ -22,6 +22,7 @@ const home = () => {
   });
 
   const [cDelete, setCdelete] = useState(false);
+  const [dWritten, setDWritten] = useState("");
 
   // number of contacts counter
   const [contactNumber, setCNumber] = useState(0);
@@ -103,21 +104,26 @@ const home = () => {
 
   const deleteAllContacts = async (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:3000/delete", {
-        method: "delete",
-      });
 
-      const data = await res.json();
+    if (dWritten === "Delete") {
+      try {
+        const res = await fetch("http://localhost:3000/delete", {
+          method: "delete",
+        });
 
-      if (data.message === "Deleted") {
-        toast.success("Contacts Deleted Successfully");
-        displayContacts();
-      } else {
-        toast.error("failure to delete contacts");
+        const data = await res.json();
+
+        if (data.message === "Deleted") {
+          toast.success("Contacts Deleted Successfully");
+          displayContacts();
+        } else {
+          toast.error("failure to delete contacts");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      toast.error("Write 'Delete' Properly");
     }
   };
 
@@ -491,6 +497,8 @@ const home = () => {
             type="text"
             className="input w-full mb-3 bg-blue-100"
             placeholder="write Delete "
+            value={dWritten}
+            onChange={(e) => setDWritten(e.target.value)}
           />
           <button
             className="delete btn bg-red-500 border-none hover:bg-red-600 text-white w-full"
