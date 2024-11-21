@@ -2,10 +2,10 @@ POST http://localhost:3000/signup
 Content-Type: application/json
 
 {
-    "fullname": "Abel Tesfa",
-    "username": "abbebe",
-    "password": "123456",
-    "confirmpassword": "123456"
+    "fullname": "Shegayenesh Seyfu",
+    "username": "seble",
+    "password": "sebless1234",
+    "confirmpassword": "sebless1234"
 }
 
 ###
@@ -14,8 +14,8 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "username": "abelat",
-    "password": "123456"
+    "username": "seble",
+    "password": "sebless1234"
 }
 
 ###

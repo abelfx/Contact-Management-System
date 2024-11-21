@@ -2,7 +2,7 @@ import { FaUser } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import logoutHandler from "../hooks/logoutHandler.js";
+import useLogoutHandler from "../hooks/useLogoutHandler";
 import {
   AiOutlineSearch,
   AiOutlineClose,
@@ -149,6 +149,22 @@ const home = () => {
   const deletefunctionality = () => {
     setDeleteVisible(!deleteVisible);
   };
+
+  const logoutHandler = () => {
+    Swal.fire({
+      title: "LogOut?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      confirmButtonColor: "blue",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/login");
+      }
+    });
+  };
+
   return (
     <div id="main" className="flex relative bg-gray-300 h-screen">
       {/* Left Sidebar */}

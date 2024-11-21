@@ -1,13 +1,10 @@
 // basic imports for backEnd functionality
 require("dotenv").config();
 
+const router = require("./routes/authRoute.js");
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const DataBase = require("./model/model.js");
-const UserBase = require("./model/user.js");
 const cors = require("cors");
-
 const { ObjectId } = require("mongodb");
 const app = express();
 
@@ -15,6 +12,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use("/", router);
 // renders the home page--note that the JWT authentication is commented here so currently it is not functional
 app.get("/home", (req, res) => {
   DataBase.find()
@@ -62,62 +60,6 @@ app.get("/contacts/:id", async (req, res) => {
   }
 });
 
-// signup
-app.post("/signup", async (req, res) => {
-  try {
-    const { fullname, username, password, confirmpassword } = req.body;
-
-    if (password === confirmpassword) {
-      const User = await UserBase.findOne({ Username: username });
-
-      if (!User) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const user = new UserBase({
-          Fullname: fullname,
-          Username: username,
-          Password: hashedPassword,
-        });
-
-        await user.save();
-
-        return res.status(200).json({ message: "successful" }); // Ensure this sends JSON
-      } else {
-        return res.status(401).json({ Error: "Username already exists" });
-      }
-    } else {
-      return res.status(401).json({ Error: "Passwords do not match" });
-    }
-  } catch (err) {
-    console.log("Error when signing up", err);
-    return res.status(500).json({ Error: "Internal server error" }); // Handle errors properly
-  }
-});
-
-// login
-app.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const UserName = await UserBase.findOne({ Username: username });
-
-    if (UserName) {
-      if (await bcrypt.compare(password, UserName.Password)) {
-        const accessToken = generateToken(username);
-        return res
-          .status(201)
-          .json({ accessToken: accessToken, message: "success" });
-      } else {
-        return res.status(401).json({ message: "Invalid password" });
-      }
-    } else {
-      return res.status(403).json({ message: "User does not exist" });
-    }
-  } catch (err) {
-    console.log("Error while logging in", err);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
-
 // adds contact to the database
 app.post("/addContact", async (req, res) => {
   try {
@@ -134,13 +76,6 @@ app.post("/addContact", async (req, res) => {
     res.sendStatus(201);
   } catch (err) {}
 });
-
-// token generating function
-function generateToken(user) {
-  return jwt.sign({ username: user }, process.env.ACCESS_TOKEN, {
-    expiresIn: "1h",
-  });
-}
 
 // authentication middleware
 function authenticate(req, res, next) {
