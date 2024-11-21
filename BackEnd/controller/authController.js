@@ -63,7 +63,18 @@ const login = async (req, res) => {
   }
 };
 
+const logout = (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(201).json({ status: "successful" });
+  } catch (error) {
+    console.log("Error while logging out", error);
+    res.status(500).json({ error: "Error while logging out" });
+  }
+};
+
 module.exports = {
   signup,
   login,
+  logout,
 };

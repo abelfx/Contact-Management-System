@@ -2,17 +2,19 @@ import { FaUser } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import userLogout from "../hooks/userLogout";
 
 import {
   AiOutlineSearch,
   AiOutlineClose,
   AiOutlineLogout,
-  AiOutlineDelete,
 } from "react-icons/ai";
 
 import { useState } from "react";
 
 const home = () => {
+  const logout = userLogout();
+
   // Add Contacts button functionality useState
   const [contacts, setContacts] = useState({
     fullName: "",
@@ -150,21 +152,6 @@ const home = () => {
     setDeleteVisible(!deleteVisible);
   };
 
-  const logoutHandler = () => {
-    Swal.fire({
-      title: "LogOut?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes",
-      cancelButtonText: "No",
-      confirmButtonColor: "blue",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/login");
-      }
-    });
-  };
-
   return (
     <div id="main" className="flex relative bg-gray-300 h-screen">
       {/* Left Sidebar */}
@@ -212,7 +199,7 @@ const home = () => {
         <AiOutlineLogout
           className="text-blue-800 hover:text-blue-500 cursor-pointer mt-auto mb-10 transition"
           size={30}
-          onClick={logoutHandler}
+          onClick={logout}
         />
       </div>
 
