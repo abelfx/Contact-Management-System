@@ -2,7 +2,7 @@ import { FaUser } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import useLogoutHandler from "../hooks/useLogoutHandler";
+
 import {
   AiOutlineSearch,
   AiOutlineClose,

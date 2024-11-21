@@ -13,8 +13,6 @@ const signup = () => {
     confirmpassword: "",
   });
 
-  const navigate = useNavigate();
-
   const handler = async (e) => {
     e.preventDefault();
     await signup(input);
@@ -130,10 +128,6 @@ const signup = () => {
             </button>
           </form>
         </div>
-      </div>
-
-      <div id="popup" className="popup">
-        Login Successful!
       </div>
     </>
   );

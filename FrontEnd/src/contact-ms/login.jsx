@@ -1,42 +1,19 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import userLogin from "../hooks/userLogin.js";
 const login = () => {
+  const login = userLogin();
+
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
 
-  const navigate = useNavigate();
-
   // Authentication using the backend will go here
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (input.username === "" || input.password === "") {
-      toast.error("Enter Full Credentials");
-    } else {
-      toast.success("Loggin In!");
-      const res = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(input),
-      });
-      const data = await res.json();
-
-      if (res.status === 201) {
-        setTimeout(() => {
-          navigate("/home");
-          toast.success("Logged in Successfully");
-        }, 2000);
-      } else {
-        setTimeout(() => {
-          toast.error("Login failed, try again");
-        }, 2000);
-      }
-    }
+    await login(input);
   };
 
   return (
