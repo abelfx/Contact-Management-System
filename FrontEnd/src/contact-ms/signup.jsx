@@ -1,8 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 import { useState } from "react";
+import userSignup from "../hooks/userSignup.js";
 
 const signup = () => {
+  // import function from userSignup
+  const signup = userSignup();
+
   const [input, setInput] = useState({
     fullname: "",
     username: "",
@@ -11,40 +14,10 @@ const signup = () => {
   });
 
   const navigate = useNavigate();
+
   const handler = async (e) => {
     e.preventDefault();
-
-    if (
-      input.fullname === "" ||
-      input.username === "" ||
-      input.password === "" ||
-      input.confirmpassword === ""
-    ) {
-      toast.error("Please Enter full credentials");
-    } else {
-      toast.success("Signing Up!");
-
-      const res = await fetch("http://localhost:3000/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(input),
-      });
-
-      const data = await res.json();
-
-      if (data.message === "successful") {
-        setTimeout(() => {
-          navigate("/login");
-          toast.success("Signed up successfully");
-        }, 2000);
-      } else {
-        setTimeout(() => {
-          toast.error("Something went wrong, please try again!");
-        }, 2000);
-      }
-    }
+    await signup(input);
   };
 
   return (

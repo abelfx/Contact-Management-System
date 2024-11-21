@@ -25,12 +25,12 @@ const signup = async (req, res) => {
           generateToken(user._id, res);
         }
 
-        return res.status(200).json({ message: "successful" }); // Ensure this sends JSON
-      } else {
-        return res.status(401).json({ Error: "Username already exists" });
+        res.status(201).json({
+          id: user._id,
+          username: user.Username,
+          password: user.Password,
+        });
       }
-    } else {
-      return res.status(401).json({ Error: "Passwords do not match" });
     }
   } catch (err) {
     console.log("Error when signing up", err);
@@ -43,10 +43,8 @@ const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await UserBase.findOne({ Username });
+    const user = await UserBase.findOne({ Username: username });
     const validpassword = await bcrypt.compare(password, user?.Password || "");
-
-    console.log(user);
 
     if (!user || !validpassword) {
       return res.status(403).send("Invalid credentials");
@@ -56,9 +54,8 @@ const login = async (req, res) => {
 
     res.status(201).json({
       id: user.id,
-      fullname: user.fullname,
-      username: user.username,
-      profilepic: user.profilepic,
+      Fullname: user.Fullname,
+      Username: user.Username,
     });
   } catch (err) {
     console.log("error while logging in", err);
