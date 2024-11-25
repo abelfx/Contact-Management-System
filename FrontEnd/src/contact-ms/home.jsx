@@ -1,8 +1,9 @@
 import { FaUser } from "react-icons/fa";
-import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import userLogout from "../hooks/userLogout";
+import userDeleteAccount from "../hooks/userDeleteAccount";
+import userAddContact from "../hooks/userAddContact";
 
 import {
   AiOutlineSearch,
@@ -16,6 +17,7 @@ import { useAuthContext } from "../context/authContext";
 const home = () => {
   const logout = userLogout();
   const { authUser } = useAuthContext();
+  const deleteAccount = userDeleteAccount();
 
   // Add Contacts button functionality useState
   const [contacts, setContacts] = useState({
@@ -24,6 +26,20 @@ const home = () => {
     email: "",
     notes: "",
   });
+
+  const addContact = async (e) => {
+    e.preventDefault();
+    const success = await userAddContact(contacts);
+    if (success) {
+      setContacts({
+        fullName: "",
+        phoneNumber: "",
+        email: "",
+        notes: "",
+      });
+    }
+    displayContacts();
+  };
 
   const [cDelete, setCdelete] = useState(false);
   const [dWritten, setDWritten] = useState("");
@@ -46,28 +62,6 @@ const home = () => {
 
   const cDeleteFunctionality = () => {
     setCdelete(!cDelete);
-  };
-
-  const addContacts = async (e) => {
-    e.preventDefault();
-
-    const res = await fetch("http://localhost:3000/addContact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(contacts),
-    });
-
-    if (res.status === 201) {
-      toast.success("Contact has been added successfully");
-      setContacts({ ...contacts, fullName: "" });
-      setContacts({ ...contacts, phoneNumber: "" });
-      setContacts({ ...contacts, email: "" });
-      setContacts({ ...contacts, notes: "" });
-
-      await displayContacts();
-    } else {
-      toast.error("Something went wrong, please try again");
-    }
   };
 
   const displayContacts = async () => {
@@ -133,22 +127,6 @@ const home = () => {
 
   displayContacts();
 
-  const deleteAccount = async () => {
-    Swal.fire({
-      title: "Are you sure?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Delete",
-      cancelButtonText: "Cancel",
-      confirmButtonColor: "red",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        toast.success("Account Deleted");
-        navigate("/signup");
-      }
-    });
-  };
-
   // toggle button which makes the delete window appear
   const deletefunctionality = () => {
     setDeleteVisible(!deleteVisible);
@@ -164,7 +142,7 @@ const home = () => {
         {/* Profile Image */}
         <div className="flex justify-center mb-4">
           <img
-            src="../public/me.jpg"
+            src="../public/profile.jpg"
             alt="Profile"
             className="rounded-full h-40 w-40 object-cover border-4 border-blue-700 shadow-md"
           />
@@ -406,7 +384,7 @@ const home = () => {
               />
             </div>
 
-            <form onSubmit={addContacts} action="/addContact" method="post">
+            <form onSubmit={addContact} action="/addContact" method="post">
               <div class="eachInput">
                 <label for="fullname" className="block pt-4">
                   Full Name:
