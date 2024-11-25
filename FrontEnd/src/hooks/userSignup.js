@@ -5,10 +5,17 @@ const userSignup = () => {
   const [loading, setLoading] = useState(false);
   const { setAuthUser } = useAuthContext();
 
-  const signup = async ({ fullname, username, password, confirmpassword }) => {
+  const signup = async ({
+    fullname,
+    username,
+    email,
+    password,
+    confirmpassword,
+  }) => {
     const success = handleAuth({
       fullname,
       username,
+      email,
       password,
       confirmpassword,
     });
@@ -22,7 +29,13 @@ const userSignup = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ fullname, username, password, confirmpassword }),
+        body: JSON.stringify({
+          fullname,
+          username,
+          email,
+          password,
+          confirmpassword,
+        }),
       });
 
       const data = await res.json();
@@ -38,8 +51,10 @@ const userSignup = () => {
   return signup;
 };
 
-function handleAuth({ fullname, username, password, confirmpassword }) {
-  if (!fullname || !username || !password || !confirmpassword) {
+function handleAuth({ fullname, username, email, password, confirmpassword }) {
+  if (!fullname || !username || !email || !password || !confirmpassword) {
+    console.log(email);
+    console.log(fullname);
     toast.error("Please fill all the fields");
     return false;
   }

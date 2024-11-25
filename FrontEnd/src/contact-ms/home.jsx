@@ -11,9 +11,11 @@ import {
 } from "react-icons/ai";
 
 import { useState } from "react";
+import { useAuthContext } from "../context/authContext";
 
 const home = () => {
   const logout = userLogout();
+  const { authUser } = useAuthContext();
 
   // Add Contacts button functionality useState
   const [contacts, setContacts] = useState({
@@ -170,10 +172,10 @@ const home = () => {
 
         {/* Profile Information */}
         <p className="text-center text-xl text-blue-800 font-semibold mt-4">
-          Abel Tesfa
+          {authUser.Username}
         </p>
         <p className="text-center text-md text-blue-800 mb-8">
-          abeltesfa198@gmail.com
+          {authUser.Email}
         </p>
 
         {/* Settings Links */}
