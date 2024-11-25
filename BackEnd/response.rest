@@ -4,6 +4,7 @@ Content-Type: application/json
 {
     "fullname": "Shegayenesh Seyfu",
     "username": "seble",
+    "email": "sebleseyfuss@gmail.com",
     "password": "sebless1234",
     "confirmpassword": "sebless1234"
 }
@@ -49,5 +50,8 @@ POST http://localhost:3000/contact/search
 Content-Type: application/json
 
 {
-    "name": "Abel Tesfa Awel"
+    "name": "Abel Tesfa"
 }
+
+###
+POST http://localhost:3000/logout

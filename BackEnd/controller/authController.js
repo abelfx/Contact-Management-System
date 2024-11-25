@@ -5,7 +5,7 @@ const generateToken = require("../util/generateToken.js");
 // signup
 const signup = async (req, res) => {
   try {
-    const { fullname, username, password, confirmpassword } = req.body;
+    const { fullname, username, email, password, confirmpassword } = req.body;
 
     if (password === confirmpassword) {
       const User = await UserBase.findOne({ Username: username });
@@ -16,6 +16,7 @@ const signup = async (req, res) => {
         const user = new UserBase({
           Fullname: fullname,
           Username: username,
+          Email: email,
           Password: hashedPassword,
         });
 
@@ -28,8 +29,10 @@ const signup = async (req, res) => {
         res.status(201).json({
           id: user._id,
           username: user.Username,
-          password: user.Password,
+          email: user.Email,
         });
+      } else {
+        res.status(401).json({ error: "Username already exists" });
       }
     }
   } catch (err) {
@@ -56,6 +59,7 @@ const login = async (req, res) => {
       id: user.id,
       Fullname: user.Fullname,
       Username: user.Username,
+      Email: user.Email,
     });
   } catch (err) {
     console.log("error while logging in", err);

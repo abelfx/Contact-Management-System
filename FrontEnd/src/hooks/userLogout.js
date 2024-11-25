@@ -1,10 +1,11 @@
 import { useAuthContext } from "../context/authContext";
+import { toast } from "react-hot-toast";
 import { useState } from "react";
 import Swal from "sweetalert2";
 
 const userLogout = () => {
   const [loading, setLoading] = useState(false);
-  const setAuthUser = useAuthContext();
+  const { setAuthUser } = useAuthContext();
 
   const logout = async () => {
     var success = false;
@@ -19,10 +20,10 @@ const userLogout = () => {
         confirmButtonColor: "red",
       });
 
-      if (!result.isConfirmed()) return;
+      if (!result.isConfirmed) return;
 
       setLoading(true);
-      const res = await fetch("localhost://3000/logout", {
+      const res = await fetch("http://localhost:3000/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });

@@ -9,8 +9,8 @@ const userLogin = () => {
   const login = async ({ username, password }) => {
     const success = loginHandler({ username, password });
 
+    console.log(success);
     if (!success) return;
-
     setLoading(true);
     try {
       const res = await fetch("http://localhost:3000/login", {
@@ -31,9 +31,9 @@ const userLogin = () => {
     } finally {
       setLoading(false);
     }
-
-    return login;
   };
+
+  return login;
 };
 
 function loginHandler({ username, password }) {

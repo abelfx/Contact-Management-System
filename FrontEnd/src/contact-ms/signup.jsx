@@ -9,6 +9,7 @@ const signup = () => {
   const [input, setInput] = useState({
     fullname: "",
     username: "",
+    email: "",
     password: "",
     confirmpassword: "",
   });
@@ -57,6 +58,21 @@ const signup = () => {
                 }
               />
             </div>
+
+            <div className="eachInput mb-3">
+              <label for="email" className="text-gray-700 font-bold">
+                Email:{" "}
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Email"
+                className="input input-bordered w-full max-w-xs"
+                value={input.email}
+                id="email"
+                onChange={(e) => setInput({ ...input, email: e.target.value })}
+              />
+            </div>
+
             <div className="eachInput mb-3">
               <label for="password" className="text-gray-700 font-bold">
                 Password
