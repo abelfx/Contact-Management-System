@@ -137,7 +137,7 @@ const home = () => {
       {/* Left Sidebar */}
       <div
         id="left"
-        className="fixed top-10 left-20 bottom-10 h-screen w-[300px] bg-gray-100 rounded-lg shadow-lg p-5 flex flex-col items-center"
+        className="fixed top-10 left-20 bottom-10 h-screen w-[300px] bg-gray-100 rounded-2xl shadow-lg p-5 flex flex-col items-center"
       >
         {/* Profile Image */}
         <div className="flex justify-center mb-4">
@@ -184,7 +184,7 @@ const home = () => {
       </div>
 
       {/* Main Content */}
-      <div className="border-blue-900 bg-gray-100 text-gray-800 overflow-y-auto rounded-lg absolute top-10 right-20 bottom-0">
+      <div className="border-blue-900 bg-gray-100 text-gray-800 overflow-y-auto rounded-2xl absolute top-10 right-20 bottom-0">
         <div className="max-w-[1300px] m-auto w-full">
           <nav className="navbar bg-blue-800 text-gray-100">
             <div className="flex-1">
@@ -330,14 +330,14 @@ const home = () => {
               <AiOutlineSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-blue-500 font-bold" />
               <button
                 onClick={toggleFunctionality}
-                className="ml-5 text-blue-500 font-bold hover:text-blue-600 bg-blue-100 p-2 rounded-md border border-gray-300 "
+                className="ml-5 text-white font-bold hover:bg-blue-600 bg-blue-500 p-2 rounded-md border border-gray-300 "
               >
                 Add Contact
               </button>
 
               <button
                 onClick={deletefunctionality}
-                className="ml-5 text-red-500 font-bold hover:text-red-600 bg-red-100 p-2 rounded-md border border-gray-300 absolute right-0"
+                className="ml-5 text-white font-bold hover:bg-red-600 bg-red-500 p-2 rounded-md border border-gray-300 absolute right-0"
               >
                 Delete Contact
               </button>
