@@ -55,3 +55,6 @@ Content-Type: application/json
 
 ###
 POST http://localhost:3000/logout
+
+###
+DELETE http://localhost:3000/delete/users/6747540440c8bc1e52acae64

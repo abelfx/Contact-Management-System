@@ -4,6 +4,7 @@ require("dotenv").config();
 const router = require("./routes/authRoute.js");
 const express = require("express");
 const DataBase = require("./model/model.js");
+const UserBase = require("./model/user.js");
 const cors = require("cors");
 const { ObjectId } = require("mongodb");
 const app = express();
@@ -117,6 +118,20 @@ app.delete("/delete/:id", async (req, res) => {
   }
 });
 
+app.delete("/delete/users/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleted = await UserBase.deleteOne({ _id: new ObjectId(id) });
+    if (deleted) {
+      return res.status(201).json({ status: "successful!" });
+    }
+
+    res.status(401).json({ status: "unsuccessful!" });
+  } catch (error) {
+    res.status(501).send("Server error occured while deleting users");
+    console.log(error);
+  }
+});
 // search contacts functionality
 app.post("/contact/search", async (req, res) => {
   try {
@@ -146,7 +161,6 @@ app.post("/contact/search", async (req, res) => {
 });
 
 // delete all contacts
-
 app.delete("/delete", async (req, res) => {
   try {
     await DataBase.deleteMany({});

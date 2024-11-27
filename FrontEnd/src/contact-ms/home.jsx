@@ -1,22 +1,28 @@
 import { FaUser } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
-
 import { useState } from "react";
-
 import LeftSide from "../components/leftSide";
 import RightSide from "../components/rightSide";
 import userDisplayContact from "../hooks/userDisplayContact";
+import userSearchContact from "../hooks/userSearchContact";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
+  const searchContact = userSearchContact();
+
+  const [search, setSearch] = useState("");
+
+  const searchContacts = async (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      await searchContact(search);
+    }
+  };
 
   const [dWritten, setDWritten] = useState("");
   // sets the visibility of the add contact right page
   const [visible, setVisible] = useState(false);
-  const navigate = useNavigate();
 
   // sets the visibillity of the delete functionality
   const [deleteVisible, setDeleteVisible] = useState(false);
@@ -202,6 +208,11 @@ const home = () => {
             <div className="relative" id="searchBar">
               <input
                 type="text"
+                onKeyDown={searchContacts}
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
                 placeholder="search name, phone"
                 className=" input bg-gray-100 border border-gray-400 p-1 pl-8 rounded-lg"
               />
