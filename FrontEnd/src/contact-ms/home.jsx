@@ -1,103 +1,28 @@
 import { FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import userLogout from "../hooks/userLogout";
-import userDeleteAccount from "../hooks/userDeleteAccount";
-import userAddContact from "../hooks/userAddContact";
 
-import {
-  AiOutlineSearch,
-  AiOutlineClose,
-  AiOutlineLogout,
-} from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 
 import { useState } from "react";
-import { useAuthContext } from "../context/authContext";
+
+import LeftSide from "../components/leftSide";
+import RightSide from "../components/rightSide";
+import userDisplayContact from "../hooks/userDisplayContact";
 
 const home = () => {
-  const logout = userLogout();
-  const { authUser } = useAuthContext();
-  const deleteAccount = userDeleteAccount();
+  const { contactNumber, displayContacts } = userDisplayContact();
 
-  // Add Contacts button functionality useState
-  const [contacts, setContacts] = useState({
-    fullName: "",
-    phoneNumber: "",
-    email: "",
-    notes: "",
-  });
-
-  const addContact = async (e) => {
-    e.preventDefault();
-    const success = await userAddContact(contacts);
-    if (success) {
-      setContacts({
-        fullName: "",
-        phoneNumber: "",
-        email: "",
-        notes: "",
-      });
-    }
-    displayContacts();
-  };
-
-  const [cDelete, setCdelete] = useState(false);
   const [dWritten, setDWritten] = useState("");
-
-  // number of contacts counter
-  const [contactNumber, setCNumber] = useState(0);
-  let count = 1;
-
-  const navigate = useNavigate();
-
   // sets the visibility of the add contact right page
   const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
 
   // sets the visibillity of the delete functionality
   const [deleteVisible, setDeleteVisible] = useState(false);
 
   const toggleFunctionality = () => {
     setVisible(!visible);
-  };
-
-  const cDeleteFunctionality = () => {
-    setCdelete(!cDelete);
-  };
-
-  const displayContacts = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/contacts");
-      const data = await response.json();
-
-      const tableBody = document.querySelector("#dataTable tbody");
-      tableBody.innerHTML = ""; // Clear any existing rows
-
-      data.forEach((contact) => {
-        const row = document.createElement("tr");
-        row.classList.add("border-b"); // Add a bottom border to rows for better styling
-
-        row.setAttribute("data-id", contact._id);
-
-        row.innerHTML = `
-        <td class="border px-4 py-2">${count++}</td>
-        <td class="border px-4 py-2">${contact.FullName}</td>
-        <td class="border px-4 py-2">${contact.PhoneNumber}</td>
-        <td class="border px-4 py-2">${contact.Email}</td>
-        <td class="border px-4 py-2 relative group">
-          ${contact.Notes}
-          <!-- Place the Delete button inside the Notes column -->
-          <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm" onclick="deleteContact('${
-            contact._id
-          }')">D</button>
-        </td>
-      `;
-        tableBody.appendChild(row);
-      });
-
-      setCNumber(count);
-    } catch (error) {
-      console.error("Error loading data:", error);
-    }
   };
 
   const deleteAllContacts = async (e) => {
@@ -134,55 +59,8 @@ const home = () => {
 
   return (
     <div id="main" className="flex relative bg-gray-300 h-screen">
-      {/* Left Sidebar */}
-      <div
-        id="left"
-        className="fixed top-10 left-20 bottom-10 h-screen w-[300px] bg-gray-100 rounded-2xl shadow-lg p-5 flex flex-col items-center"
-      >
-        {/* Profile Image */}
-        <div className="flex justify-center mb-4">
-          <img
-            src="../public/profile.jpg"
-            alt="Profile"
-            className="rounded-full h-40 w-40 object-cover border-4 border-blue-700 shadow-md"
-          />
-        </div>
-
-        {/* Profile Information */}
-        <p className="text-center text-xl text-blue-800 font-semibold mt-4">
-          {authUser.Username}
-        </p>
-        <p className="text-center text-md text-blue-800 mb-8">
-          {authUser.Email}
-        </p>
-
-        {/* Settings Links */}
-        <div className="w-full">
-          <p className="text-center border-b-2 py-3 cursor-pointer text-gray-700 hover:bg-gray-200 rounded-md transition">
-            Account Settings
-          </p>
-          <p className="text-center border-b-2 py-3 cursor-pointer text-gray-700 hover:bg-gray-200 rounded-md transition">
-            Overview
-          </p>
-          <p className="text-center border-b-2 py-3 cursor-pointer text-gray-700 hover:bg-gray-200 rounded-md transition">
-            Unsubscribe
-          </p>
-          <p
-            onClick={deleteAccount}
-            className="text-center py-3 cursor-pointer text-red-500 hover:bg-red-100 rounded-md transition"
-          >
-            Delete Account
-          </p>
-        </div>
-
-        {/* Logout Button */}
-        <AiOutlineLogout
-          className="text-blue-800 hover:text-blue-500 cursor-pointer mt-auto mb-10 transition"
-          size={30}
-          onClick={logout}
-        />
-      </div>
-
+      {/* Left Side Content*/}
+      <LeftSide />
       {/* Main Content */}
       <div className="border-blue-900 bg-gray-100 text-gray-800 overflow-y-auto rounded-2xl absolute top-10 right-20 bottom-0">
         <div className="max-w-[1300px] m-auto w-full">
@@ -373,93 +251,7 @@ const home = () => {
           visible ? "block" : "hidden"
         }`}
       >
-        <div className="p-3 pt-10 text-black">
-          <div>
-            <div className="flex items-center justify-between">
-              <h2 className="text-3xl text-center pb-7">Add a Contact</h2>
-              <AiOutlineClose
-                onClick={toggleFunctionality}
-                className="mb-6 hover:cursor-pointer "
-                size={25}
-              />
-            </div>
-
-            <form onSubmit={addContact} action="/addContact" method="post">
-              <div class="eachInput">
-                <label for="fullname" className="block pt-4">
-                  Full Name:
-                </label>
-                <input
-                  type="text"
-                  id="fullname"
-                  name="fullName"
-                  placeholder="Enter Name"
-                  required
-                  className="bg-gray-200 input border border-gray-500 mt-2 w-full"
-                  value={contacts.fullName}
-                  onChange={(e) =>
-                    setContacts({ ...contacts, fullName: e.target.value })
-                  }
-                />
-              </div>
-              <div class="eachInput">
-                <label for="phoneNumber" className="block pt-4">
-                  Phone No:
-                </label>
-                <input
-                  type="text"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  placeholder="Enter number"
-                  required
-                  className="bg-gray-200 input border border-gray-500 mt-2 w-full"
-                  value={contacts.phoneNumber}
-                  onChange={(e) =>
-                    setContacts({ ...contacts, phoneNumber: e.target.value })
-                  }
-                />
-              </div>
-              <div class="eachInput">
-                <label for="email" className="block pt-4">
-                  Email:
-                </label>
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  placeholder="Enter email"
-                  className="bg-gray-200 input border border-gray-500 mt-2 w-full"
-                  value={contacts.email}
-                  onChange={(e) =>
-                    setContacts({ ...contacts, email: e.target.value })
-                  }
-                />
-              </div>
-              <div class="eachInput">
-                <label for="notes" className="block pt-4">
-                  Notes:
-                </label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  placeholder="Type any extra information here..."
-                  className="bg-gray-200 border border-gray-500 p-1 mt-2 w-full h-36"
-                  value={contacts.notes}
-                  onChange={(e) =>
-                    setContacts({ ...contacts, notes: e.target.value })
-                  }
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                className="btn w-full mt-8 bg-blue-500 text-white p-3 rounded-md border-none hover:bg-blue-600"
-              >
-                Add Contact
-              </button>
-            </form>
-          </div>
-        </div>
+        <RightSide />
       </div>
 
       <div
