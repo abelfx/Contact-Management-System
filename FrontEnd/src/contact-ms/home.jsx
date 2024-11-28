@@ -6,10 +6,14 @@ import LeftSide from "../components/leftSide";
 import RightSide from "../components/rightSide";
 import userDisplayContact from "../hooks/userDisplayContact";
 import userSearchContact from "../hooks/userSearchContact";
+import DetailedContact from "../components/detailedContact";
+import AccountSettings from "../components/accountSetting.jsx";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
   const [search, setSearch] = useState("");
+  const [userVisible, setUserVisible] = useState(false);
+  const [accountVisible, setAccountVisible] = useState(false);
   const searchContact = userSearchContact();
 
   const searchContacts = async (e) => {
@@ -26,8 +30,18 @@ const home = () => {
   // sets the visibillity of the delete functionality
   const [deleteVisible, setDeleteVisible] = useState(false);
 
+  // sets the visibility of the detailed user information component
+  const userToggleFunctionality = () => {
+    setUserVisible(!userVisible);
+  };
+
+  // sets the visibility of the add contacts component
   const toggleFunctionality = () => {
     setVisible(!visible);
+  };
+
+  const accountToggleFunctionality = () => {
+    setAccountVisible(!accountVisible);
   };
 
   const deleteAllContacts = async (e) => {
@@ -229,6 +243,8 @@ const home = () => {
               >
                 Delete Contact
               </button>
+
+              <button onClick={accountToggleFunctionality}>Tester</button>
             </div>
 
             {/* Table with max height and overflow */}
@@ -242,7 +258,12 @@ const home = () => {
                     <th className="border px-4 py-2">ID</th>
                     <th className="border px-4 py-2">Name</th>
                     <th className="border px-4 py-2">Phone No</th>
-                    <th className="border px-4 py-2">Email</th>
+                    <th
+                      onClick={userToggleFunctionality}
+                      className="border px-4 py-2"
+                    >
+                      Email
+                    </th>
                     <th className="border px-4 py-2">Notes</th>
                   </tr>
                 </thead>
@@ -252,9 +273,7 @@ const home = () => {
           </div>
         </div>
       </div>
-
       {/*Right Side*/}
-
       <div
         id="right"
         className={`fixed top-0 right-0 h-screen w-[350px] bg-gray-100 ${
@@ -263,7 +282,6 @@ const home = () => {
       >
         <RightSide />
       </div>
-
       <div
         id="delete"
         className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 border border-black shadow-lg  p-10 ${
@@ -293,7 +311,6 @@ const home = () => {
           </button>
         </form>
       </div>
-
       {/*this is the Account Setting part of the page......it is not functional */}
       {/* <div
         id="account-setting"
@@ -307,6 +324,24 @@ const home = () => {
         />
         <p>it is time for africa</p>
       </div> */}
+
+      <div
+        id="detailed-user"
+        className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 border rounded-lg shadow-2xl  p-10  max-w-lg ${
+          userVisible ? "block" : "hidden"
+        }`}
+      >
+        <DetailedContact />
+      </div>
+
+      <div
+        id="accountSetting"
+        className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 border rounded-lg shadow-2xl  p-10  max-w-lg ${
+          accountVisible ? "block" : "hidden"
+        }`}
+      >
+        <AccountSettings />
+      </div>
     </div>
   );
 };
