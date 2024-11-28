@@ -9,9 +9,8 @@ import userSearchContact from "../hooks/userSearchContact";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
-  const searchContact = userSearchContact();
-
   const [search, setSearch] = useState("");
+  const searchContact = userSearchContact();
 
   const searchContacts = async (e) => {
     if (e.key === "Enter") {

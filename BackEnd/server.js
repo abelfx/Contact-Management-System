@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/", router);
+
 // renders the home page--note that the JWT authentication is commented here so currently it is not functional
 app.get("/home", (req, res) => {
   DataBase.find()
@@ -132,6 +133,7 @@ app.delete("/delete/users/:id", async (req, res) => {
     console.log(error);
   }
 });
+
 // search contacts functionality
 app.post("/contact/search", async (req, res) => {
   try {

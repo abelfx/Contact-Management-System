@@ -1,13 +1,7 @@
 import { useState } from "react";
-import {
-  AiOutlineSearch,
-  AiOutlineClose,
-  AiOutlineLogout,
-  AiOutlineDelete,
-} from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 const rightside = () => {
   const [visible, setVisible] = useState(false);
-
   const toggleFunctionality = () => {
     setVisible(!visible);
   };

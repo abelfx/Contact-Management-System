@@ -32,7 +32,7 @@ POST http://localhost:3000/addContact
 Content-Type: application/json
 
 {
-    "fullName": "Abel Tesfa",
+    "fullName": "Abel",
     "phoneNumber": "1234567890",
     "email": "codshf@gmaij.com",
     "notes": "wohoo"
