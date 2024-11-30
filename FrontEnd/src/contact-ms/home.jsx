@@ -9,13 +9,15 @@ import userSearchContact from "../hooks/userSearchContact";
 import DetailedContact from "../components/detailedContact";
 import AccountSettings from "../components/accountSetting.jsx";
 import { useRightSide } from "../context/RightSideContext.jsx";
+import { useAccountSettingContext } from "../context/accountSettingContext.jsx";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
   const [search, setSearch] = useState("");
   const [userVisible, setUserVisible] = useState(false);
-  const [accountVisible, setAccountVisible] = useState(false);
   const searchContact = userSearchContact();
+  const { accountVisible, accountToggleFunctionality } =
+    useAccountSettingContext();
 
   const { visible, toggleFunctionality } = useRightSide();
 
@@ -33,10 +35,6 @@ const home = () => {
   // sets the visibility of the detailed user information component
   const userToggleFunctionality = () => {
     setUserVisible(!userVisible);
-  };
-
-  const accountToggleFunctionality = () => {
-    setAccountVisible(!accountVisible);
   };
 
   const deleteAllContacts = async (e) => {
@@ -268,6 +266,7 @@ const home = () => {
           </div>
         </div>
       </div>
+
       {/*Right Side*/}
       <div
         id="right"
@@ -277,6 +276,7 @@ const home = () => {
       >
         <RightSide />
       </div>
+
       <div
         id="delete"
         className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 border border-black shadow-lg  p-10 ${
@@ -306,19 +306,6 @@ const home = () => {
           </button>
         </form>
       </div>
-      {/*this is the Account Setting part of the page......it is not functional */}
-      {/* <div
-        id="account-setting"
-        className={` absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 border border-black shadow-lg  p-10 ${
-          deleteVisible ? "block" : "hidden"
-        }`}
-      >
-        <AiOutlineClose
-          className="absolute top-3 right-3 text-2xl text-black hover:bg-red-200"
-          onClick={deletefunctionality}
-        />
-        <p>it is time for africa</p>
-      </div> */}
 
       <div
         id="detailed-user"

@@ -1,4 +1,3 @@
-import React from "react";
 import useAccountSettings from "../hooks/useAccountSetting";
 
 const accountSettings = () => {

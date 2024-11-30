@@ -2,11 +2,15 @@ import userLogout from "../hooks/userLogout";
 import userDeleteAccount from "../hooks/userDeleteAccount";
 import { useAuthContext } from "../context/authContext";
 import { AiOutlineLogout } from "react-icons/ai";
+import { useAccountSettingContext } from "../context/accountSettingContext";
 
 const leftSide = () => {
   const logout = userLogout();
   const { authUser } = useAuthContext();
   const deleteAccount = userDeleteAccount();
+
+  const { accountToggleFunctionality } = useAccountSettingContext();
+
   return (
     <div
       id="left"
@@ -29,7 +33,10 @@ const leftSide = () => {
 
       {/* Settings Links */}
       <div className="w-full">
-        <p className="text-center border-b-2 py-3 cursor-pointer text-gray-700 hover:bg-gray-200 rounded-md transition">
+        <p
+          className="text-center border-b-2 py-3 cursor-pointer text-gray-700 hover:bg-gray-200 rounded-md transition"
+          onClick={accountToggleFunctionality}
+        >
           Account Settings
         </p>
         <p className="text-center border-b-2 py-3 cursor-pointer text-gray-700 hover:bg-gray-200 rounded-md transition">
