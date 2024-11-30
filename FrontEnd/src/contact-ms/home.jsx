@@ -8,6 +8,7 @@ import userDisplayContact from "../hooks/userDisplayContact";
 import userSearchContact from "../hooks/userSearchContact";
 import DetailedContact from "../components/detailedContact";
 import AccountSettings from "../components/accountSetting.jsx";
+import { useRightSide } from "../context/RightSideContext.jsx";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
@@ -15,6 +16,8 @@ const home = () => {
   const [userVisible, setUserVisible] = useState(false);
   const [accountVisible, setAccountVisible] = useState(false);
   const searchContact = userSearchContact();
+
+  const { visible, toggleFunctionality } = useRightSide();
 
   const searchContacts = async (e) => {
     if (e.key === "Enter") {
@@ -24,20 +27,12 @@ const home = () => {
   };
 
   const [dWritten, setDWritten] = useState("");
-  // sets the visibility of the add contact right page
-  const [visible, setVisible] = useState(false);
-
   // sets the visibillity of the delete functionality
   const [deleteVisible, setDeleteVisible] = useState(false);
 
   // sets the visibility of the detailed user information component
   const userToggleFunctionality = () => {
     setUserVisible(!userVisible);
-  };
-
-  // sets the visibility of the add contacts component
-  const toggleFunctionality = () => {
-    setVisible(!visible);
   };
 
   const accountToggleFunctionality = () => {
@@ -277,7 +272,7 @@ const home = () => {
       <div
         id="right"
         className={`fixed top-0 right-0 h-screen w-[350px] bg-gray-100 ${
-          visible ? "block" : "hidden"
+          visible && <RightSide /> ? "block" : "hidden"
         }`}
       >
         <RightSide />

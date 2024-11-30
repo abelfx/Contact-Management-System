@@ -1,6 +1,7 @@
 import userAddContact from "../hooks/userAddContact";
 import { AiOutlineClose } from "react-icons/ai";
 import userDisplayContact from "../hooks/userDisplayContact";
+import { useRightSide } from "../context/RightSideContext";
 import { useState } from "react";
 
 const rightSide = () => {
@@ -12,14 +13,10 @@ const rightSide = () => {
     notes: "",
   });
 
+  // close functionality
+  const { visible, toggleFunctionality } = useRightSide();
+
   const { contactNumber, displayContacts } = userDisplayContact();
-
-  // sets the visibility of the add contact right page
-  const [visible, setVisible] = useState(false);
-
-  const toggleFunctionality = () => {
-    setVisible(!visible);
-  };
 
   const addContact = async (e) => {
     e.preventDefault();
@@ -34,6 +31,8 @@ const rightSide = () => {
     }
     displayContacts();
   };
+
+  if (!visible) return null;
 
   return (
     <div className="p-3 pt-10 text-black">
