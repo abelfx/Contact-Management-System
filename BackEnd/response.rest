@@ -15,7 +15,7 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "username": "seble",
+    "username": "sebli",
     "password": "sebless1234"
 }
 
@@ -58,3 +58,13 @@ POST http://localhost:3000/logout
 
 ###
 DELETE http://localhost:3000/delete/users/6747540440c8bc1e52acae64
+
+###
+POST http://localhost:3000/user/password
+Content-Type: application/json
+
+{
+    "username": "sebli",
+    "currentPassword": "111111",
+    "newPassword": "222222"
+}

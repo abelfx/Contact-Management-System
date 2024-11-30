@@ -8,6 +8,7 @@ const UserBase = require("./model/user.js");
 const cors = require("cors");
 const { ObjectId } = require("mongodb");
 const app = express();
+const bcrypt = require("bcryptjs");
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -172,6 +173,45 @@ app.delete("/delete", async (req, res) => {
   }
 });
 
+// changes current password
+app.post("/user/password", async (req, res) => {
+  try {
+    const username = req.body.username;
+    const newPassword = req.body.newPassword;
+    const currentPassword = req.body.currentPassword;
+
+    console.log(username);
+
+    const user = await UserBase.findOne({ Username: username });
+    if (!user) {
+      return res.status(401).json({ status: "username is incorrect" });
+    }
+
+    if (await !bcrypt.compare(currentPassword, user.Password)) {
+      return res
+        .status(401)
+        .json({ status: "Current password is not correct! try again" });
+    }
+
+    const pass = await bcrypt.hash(newPassword, 10);
+    const changed = await UserBase.findOneAndUpdate(
+      {
+        Username: username,
+      },
+      { $set: { Password: pass } },
+      { new: true }
+    );
+
+    if (changed) {
+      return res.status(201).json({ status: "password changed successfully!" });
+    }
+
+    return res.send("Something went wrong");
+  } catch (error) {
+    res.status(501).send("error while changing password");
+    console.log(error);
+  }
+});
 // server listener
 app.listen(3000, (err) => {
   if (err) return console.log(err);
