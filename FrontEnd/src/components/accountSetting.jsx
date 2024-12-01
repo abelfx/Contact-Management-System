@@ -1,8 +1,18 @@
 import useAccountSettings from "../hooks/useAccountSetting";
+import { useState } from "react";
 
 const accountSettings = () => {
-  const { username, email, password, emailNotifications, updateSettings } =
-    useAccountSettings();
+  const useAccount = useAccountSettings();
+  const [user, setUser] = useState({
+    username: "",
+    oldPassword: "",
+    newPassword: "",
+  });
+
+  const changePassword = async (e) => {
+    e.preventDefault();
+    await useAccount(user);
+  };
 
   return (
     <div>
@@ -17,19 +27,21 @@ const accountSettings = () => {
         </label>
         <input
           type="text"
-          value={username}
-          onChange={(e) => updateSettings("username", e.target.value)}
+          value={user.username}
+          onChange={(e) => setUser({ ...user, username: e.target.value })}
           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
-      {/* Email */}
+      {/* current password*/}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Email</label>
+        <label className="block text-sm font-medium text-gray-700">
+          Current Password
+        </label>
         <input
-          type="email"
-          value={email}
-          onChange={(e) => updateSettings("email", e.target.value)}
+          type="password"
+          value={user.oldPassword}
+          onChange={(e) => setUser({ ...user, oldPassword: e.target.value })}
           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
@@ -41,14 +53,14 @@ const accountSettings = () => {
         </label>
         <input
           type="password"
-          value={password}
-          onChange={(e) => updateSettings("password", e.target.value)}
+          value={user.newPassword}
+          onChange={(e) => setUser({ ...user, newPassword: e.target.value })}
           className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
       {/* Email Notifications */}
-      <div className="flex items-center mb-4">
+      {/* <div className="flex items-center mb-4">
         <input
           type="checkbox"
           checked={emailNotifications}
@@ -60,12 +72,12 @@ const accountSettings = () => {
         <label className="ml-2 text-sm text-gray-700">
           Enable email notifications
         </label>
-      </div>
+      </div> */}
 
       {/* Save Button */}
       <div className="text-right">
         <button
-          onClick={() => alert("Settings saved!")}
+          onClick={changePassword}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
         >
           Save Changes

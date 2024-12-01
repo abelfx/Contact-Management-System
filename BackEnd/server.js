@@ -178,7 +178,7 @@ app.post("/user/password", async (req, res) => {
   try {
     const username = req.body.username;
     const newPassword = req.body.newPassword;
-    const currentPassword = req.body.currentPassword;
+    const currentPassword = req.body.oldPassword;
 
     console.log(username);
 

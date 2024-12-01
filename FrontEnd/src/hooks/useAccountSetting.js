@@ -1,37 +1,40 @@
-import { useState } from "react";
+import toast from "react-hot-toast";
 
-const useAccountSettings = () => {
-  const [username, setUsername] = useState("JohnDoe123");
-  const [email, setEmail] = useState("johndoe@example.com");
-  const [password, setPassword] = useState("");
-  const [emailNotifications, setEmailNotifications] = useState(true);
+const useAccountSetting = () => {
+  const useAccount = async ({ username, oldPassword, newPassword }) => {
+    try {
+      const success = fieldChecker({ username, oldPassword, newPassword });
 
-  const updateSettings = (field, value) => {
-    switch (field) {
-      case "username":
-        setUsername(value);
-        break;
-      case "email":
-        setEmail(value);
-        break;
-      case "password":
-        setPassword(value);
-        break;
-      case "emailNotifications":
-        setEmailNotifications(value);
-        break;
-      default:
-        break;
+      if (!success) {
+        return;
+      }
+      const res = await fetch("http://localhost:3000/user/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, oldPassword, newPassword }),
+      });
+
+      const data = await res.json();
+
+      if (data.status === "password changed successfully!") {
+        toast.success(data.status);
+      } else {
+        toast.error("An error Occured, please try again!");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  return {
-    username,
-    email,
-    password,
-    emailNotifications,
-    updateSettings,
-  };
+  return useAccount;
 };
 
-export default useAccountSettings;
+function fieldChecker({ username, oldPassword, newPassword }) {
+  if (!username || !oldPassword || !newPassword) {
+    toast.error("Please fill all fields");
+    return false;
+  }
+
+  return true;
+}
+export default useAccountSetting;

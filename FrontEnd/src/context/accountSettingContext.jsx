@@ -11,7 +11,6 @@ export const AccountSettingProvider = ({ children }) => {
 
   const accountToggleFunctionality = (e) => {
     e.preventDefault();
-    console.log("the p BUTTON IS CLICKED");
     setAccountVisible((prev) => !prev);
   };
 
