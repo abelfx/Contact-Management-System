@@ -1,11 +1,18 @@
 import toast from "react-hot-toast";
+import { useAuthContext } from "../context/authContext";
 
 const useAccountSetting = () => {
+  const { authUser } = useAuthContext();
   const useAccount = async ({ username, oldPassword, newPassword }) => {
     try {
       const success = fieldChecker({ username, oldPassword, newPassword });
 
       if (!success) {
+        return;
+      }
+
+      if (authUser.Username !== username) {
+        toast.error("Invalid Username");
         return;
       }
       const res = await fetch("http://localhost:3000/user/password", {

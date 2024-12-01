@@ -1,7 +1,7 @@
 import { FaUser } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LeftSide from "../components/leftSide";
 import RightSide from "../components/rightSide";
 import userDisplayContact from "../hooks/userDisplayContact";
@@ -10,14 +10,15 @@ import DetailedContact from "../components/detailedContact";
 import AccountSettings from "../components/accountSetting.jsx";
 import { useRightSide } from "../context/RightSideContext.jsx";
 import { useAccountSettingContext } from "../context/accountSettingContext.jsx";
+import useDeleteContacts from "../hooks/useDeleteContacts.js";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
   const [search, setSearch] = useState("");
   const [userVisible, setUserVisible] = useState(false);
   const searchContact = userSearchContact();
-  const { accountVisible, accountToggleFunctionality } =
-    useAccountSettingContext();
+  const { accountVisible } = useAccountSettingContext();
+  const deleteContacts = useDeleteContacts();
 
   const { visible, toggleFunctionality } = useRightSide();
 
@@ -25,10 +26,14 @@ const home = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       await searchContact(search);
+    } else {
+      toast.error("Write 'Delete' Properly");
     }
   };
 
+  // checks whether Delete is written properly
   const [dWritten, setDWritten] = useState("");
+
   // sets the visibillity of the delete functionality
   const [deleteVisible, setDeleteVisible] = useState(false);
 
@@ -39,30 +44,18 @@ const home = () => {
 
   const deleteAllContacts = async (e) => {
     e.preventDefault();
-
     if (dWritten === "Delete") {
-      try {
-        const res = await fetch("http://localhost:3000/delete", {
-          method: "delete",
-        });
-
-        const data = await res.json();
-
-        if (data.message === "Deleted") {
-          toast.success("Contacts Deleted Successfully");
-          displayContacts();
-        } else {
-          toast.error("failure to delete contacts");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      toast.error("Write 'Delete' Properly");
+      await deleteContacts();
     }
   };
 
-  displayContacts();
+  useEffect(() => {
+    displayContacts();
+
+    const interval = setInterval(displayContacts, 500); // Fetch every 5 seconds
+
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, []);
 
   // toggle button which makes the delete window appear
   const deletefunctionality = () => {
@@ -89,10 +82,10 @@ const home = () => {
                     <summary>Contacts</summary>
                     <ul className="bg-blue-600 rounded-t-none p-2">
                       <li>
-                        <a>Link 1</a>
+                        <a>Export Contacts</a>
                       </li>
                       <li>
-                        <a>Link 2</a>
+                        <a>Add Contact</a>
                       </li>
                     </ul>
                   </details>
@@ -102,10 +95,10 @@ const home = () => {
                     <summary>Conversations</summary>
                     <ul className="bg-blue-600 rounded-t-none p-2">
                       <li>
-                        <a>Link 1</a>
+                        <a>All Convos</a>
                       </li>
                       <li>
-                        <a>Link 2</a>
+                        <a>Inbox</a>
                       </li>
                     </ul>
                   </details>
@@ -115,10 +108,10 @@ const home = () => {
                     <summary>Marketing</summary>
                     <ul className="bg-blue-600 rounded-t-none p-2">
                       <li>
-                        <a>Link 1</a>
+                        <a>Templates</a>
                       </li>
                       <li>
-                        <a>Link 2</a>
+                        <a>Performance</a>
                       </li>
                     </ul>
                   </details>
@@ -128,10 +121,10 @@ const home = () => {
                     <summary>Sales</summary>
                     <ul className="bg-blue-600 rounded-t-none p-2">
                       <li>
-                        <a>Link 1</a>
+                        <a>Sales Analytics</a>
                       </li>
                       <li>
-                        <a>Link 2</a>
+                        <a>Deals</a>
                       </li>
                     </ul>
                   </details>
@@ -141,10 +134,10 @@ const home = () => {
                     <summary>Service</summary>
                     <ul className="bg-blue-600 rounded-t-none p-2">
                       <li>
-                        <a>Link 1</a>
+                        <a>Live Charts</a>
                       </li>
                       <li>
-                        <a>Link 2</a>
+                        <a>Service Reports</a>
                       </li>
                     </ul>
                   </details>
@@ -236,8 +229,6 @@ const home = () => {
               >
                 Delete Contact
               </button>
-
-              <button onClick={accountToggleFunctionality}>Tester</button>
             </div>
 
             {/* Table with max height and overflow */}
