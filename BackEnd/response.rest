@@ -3,9 +3,9 @@ Content-Type: application/json
 
 {
     "fullname": "Shegayenesh Seyfu",
-    "username": "sebli",
+    "username": "seble",
     "email": "sebleseyfuss@gmail.com",
-    "password": "sebless1234",
+    "password": "123456",
     "confirmpassword": "sebless1234"
 }
 
@@ -63,7 +63,7 @@ POST http://localhost:3000/user/password
 Content-Type: application/json
 
 {
-    "username": "sebli",
+    "username": "abelaaa",
     "currentPassword": "111111",
     "newPassword": "222222"
 }

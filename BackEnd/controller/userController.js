@@ -1,59 +1,62 @@
-const UserBase = require("../model/user.js");
+const { ObjectId } = require("mongodb"); // Import ObjectId
 const bcrypt = require("bcryptjs");
+const UserBase = require("../model/user.js");
 
-// deletes user account
+// Deletes user account
 const deleteAccount = async (req, res) => {
   try {
     const id = req.params.id;
+
+    // Delete user by ID
     const deleted = await UserBase.deleteOne({ _id: new ObjectId(id) });
-    if (deleted) {
-      return res.status(201).json({ status: "successful!" });
+    if (deleted.deletedCount > 0) {
+      return res.status(200).json({ status: "successful!" });
     }
 
-    res.status(401).json({ status: "unsuccessful!" });
+    res.status(404).json({ status: "User not found!" });
   } catch (error) {
-    res.status(501).send("Server error occured while deleting users");
-    console.log(error);
+    res.status(500).send("Server error occurred while deleting users");
+    console.error(error);
   }
 };
 
-// changes current password
+// Changes current password
 const changeAccountPassword = async (req, res) => {
   try {
-    const username = req.body.username;
-    const newPassword = req.body.newPassword;
-    const currentPassword = req.body.oldPassword;
+    const { username, newPassword, oldPassword } = req.body;
 
-    console.log(username);
-
+    // Check if the user exists
     const user = await UserBase.findOne({ Username: username });
     if (!user) {
-      return res.status(401).json({ status: "username is incorrect" });
+      return res.status(404).json({ status: "Username is incorrect" });
     }
 
-    if (await !bcrypt.compare(currentPassword, user.Password)) {
+    // Compare current password
+    const isMatch = await bcrypt.compare(oldPassword, user.Password);
+    if (!isMatch) {
       return res
         .status(401)
-        .json({ status: "Current password is not correct! try again" });
+        .json({ status: "Current password is not correct! Try again." });
     }
 
-    const pass = await bcrypt.hash(newPassword, 10);
+    // Hash the new password and update
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
     const changed = await UserBase.findOneAndUpdate(
-      {
-        Username: username,
-      },
-      { $set: { Password: pass } },
+      { Username: username },
+      { $set: { Password: hashedPassword } },
       { new: true }
     );
 
     if (changed) {
-      return res.status(201).json({ status: "password changed successfully!" });
+      return res.status(200).json({ status: "Password changed successfully!" });
     }
 
-    return res.send("Something went wrong");
+    res
+      .status(500)
+      .json({ status: "Something went wrong while updating password" });
   } catch (error) {
-    res.status(501).send("error while changing password");
-    console.log(error);
+    res.status(500).send("Error while changing password");
+    console.error(error);
   }
 };
 
