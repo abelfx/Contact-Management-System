@@ -115,29 +115,6 @@ app.post("/user/password", async (req, res) => {
   }
 });
 
-// chatAssistant configuration
-// const configuration = new Configuration({
-//   apiKey:
-//     "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",
-// });
-
-// const openai = new OpenAIApi(configuration);
-
-// app.post("/api/chat", async (req, res) => {
-//   try {
-//     const userMessage = req.body.message;
-//     const response = await openai.createChatCompletion({
-//       model: "gpt-3.5-turbo",
-//       messages: [{ role: "user", content: userMessage }],
-//     });
-
-//     res.json({ reply: response.data.choices[0].message.content });
-//   } catch (error) {
-//     console.error("Error in chat assistant:", error.message);
-//     res.status(500).json({ error: "Something went wrong" });
-//   }
-// });
-
 // server listener
 app.listen(3000, (err) => {
   if (err) return console.log(err);
