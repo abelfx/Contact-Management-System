@@ -39,8 +39,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE  http://localhost:3000/delete/67342cc3eddc86d154995678
-
+DELETE  http://localhost:3000/delete/674d6bd38975e90b077aba9c
 ### 
 GET http://localhost:3000/contacts
 
@@ -67,4 +66,11 @@ Content-Type: application/json
     "username": "sebli",
     "currentPassword": "111111",
     "newPassword": "222222"
+}
+
+###
+POST http://localhost:3000/api/chat
+Content-Type: application/json
+{
+    "message": "how can i use a contact management system"
 }

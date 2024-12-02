@@ -26,8 +26,6 @@ const home = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       await searchContact(search);
-    } else {
-      toast.error("Write 'Delete' Properly");
     }
   };
 
@@ -46,6 +44,8 @@ const home = () => {
     e.preventDefault();
     if (dWritten === "Delete") {
       await deleteContacts();
+    } else {
+      toast.error("Write 'Delete' Properly");
     }
   };
 

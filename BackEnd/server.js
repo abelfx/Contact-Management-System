@@ -2,6 +2,8 @@
 require("dotenv").config();
 
 const router = require("./routes/authRoute.js");
+const router2 = require("./routes/contactRoute.js");
+const router3 = require("./routes/userRoute.js");
 const express = require("express");
 const DataBase = require("./model/model.js");
 const UserBase = require("./model/user.js");
@@ -15,34 +17,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/", router);
-
-// renders the home page--note that the JWT authentication is commented here so currently it is not functional
-app.get("/home", (req, res) => {
-  DataBase.find()
-    .sort({ createdAt: -1 })
-    .then((result) => {
-      res.render("home", { contacts: result });
-    })
-    .catch((error) => {
-      console.log("Error on /home route / loading contacts from DB", error);
-    });
-});
-
-// output all the avaliable contacts
-app.get("/contacts", async (req, res) => {
-  try {
-    const contact = await DataBase.find({});
-
-    if (contact) {
-      return res.json(contact);
-    }
-
-    return sendStatus(404);
-  } catch (error) {
-    console.error("error fetching contact");
-    res.status(501);
-  }
-});
+app.use("/", router2);
+app.use("/", router3);
 
 // used to get detailed information about the contact
 app.get("/contacts/:id", async (req, res) => {
@@ -61,23 +37,6 @@ app.get("/contacts/:id", async (req, res) => {
     console.error("Error fetching contact:", error);
     res.sendStatus(500);
   }
-});
-
-// adds contact to the database
-app.post("/addContact", async (req, res) => {
-  try {
-    const { fullName, phoneNumber, email, notes } = req.body;
-    const Contact = new DataBase({
-      FullName: fullName,
-      PhoneNumber: phoneNumber,
-      Email: email,
-      Notes: notes,
-    });
-
-    await Contact.save();
-
-    res.sendStatus(201);
-  } catch (err) {}
 });
 
 // authentication middleware
@@ -103,115 +62,29 @@ function authenticate(req, res, next) {
   });
 }
 
-// Delete Contact
-app.delete("/delete/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
+// chatAssistant configuration
+// const configuration = new Configuration({
+//   apiKey:
+//     "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",
+// });
 
-    const deleted = await DataBase.deleteOne({ _id: new ObjectId(id) });
+// const openai = new OpenAIApi(configuration);
 
-    if (deleted) {
-      return res.status(201).json({ Status: "deleted" });
-    }
+// app.post("/api/chat", async (req, res) => {
+//   try {
+//     const userMessage = req.body.message;
+//     const response = await openai.createChatCompletion({
+//       model: "gpt-3.5-turbo",
+//       messages: [{ role: "user", content: userMessage }],
+//     });
 
-    return res.status(401).send("not deleted");
-  } catch (err) {
-    console.log("Error while deleting", err);
-  }
-});
+//     res.json({ reply: response.data.choices[0].message.content });
+//   } catch (error) {
+//     console.error("Error in chat assistant:", error.message);
+//     res.status(500).json({ error: "Something went wrong" });
+//   }
+// });
 
-app.delete("/delete/users/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const deleted = await UserBase.deleteOne({ _id: new ObjectId(id) });
-    if (deleted) {
-      return res.status(201).json({ status: "successful!" });
-    }
-
-    res.status(401).json({ status: "unsuccessful!" });
-  } catch (error) {
-    res.status(501).send("Server error occured while deleting users");
-    console.log(error);
-  }
-});
-
-// search contacts functionality
-app.post("/contact/search", async (req, res) => {
-  try {
-    const name = req.body.name.toLowerCase();
-
-    const contact = await DataBase.aggregate([
-      {
-        $addFields: {
-          lowerFullName: { $toLower: "$FullName" },
-        },
-      },
-      {
-        $match: {
-          lowerFullName: name,
-        },
-      },
-    ]);
-
-    if (contact.length > 0) {
-      return res.status(201).json(contact);
-    }
-
-    return res.status(401).json({ error: "Contact not found" });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-// delete all contacts
-app.delete("/delete", async (req, res) => {
-  try {
-    await DataBase.deleteMany({});
-    return res.status(201).json({ message: "Deleted" });
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-// changes current password
-app.post("/user/password", async (req, res) => {
-  try {
-    const username = req.body.username;
-    const newPassword = req.body.newPassword;
-    const currentPassword = req.body.oldPassword;
-
-    console.log(username);
-
-    const user = await UserBase.findOne({ Username: username });
-    if (!user) {
-      return res.status(401).json({ status: "username is incorrect" });
-    }
-
-    if (await !bcrypt.compare(currentPassword, user.Password)) {
-      return res
-        .status(401)
-        .json({ status: "Current password is not correct! try again" });
-    }
-
-    const pass = await bcrypt.hash(newPassword, 10);
-    const changed = await UserBase.findOneAndUpdate(
-      {
-        Username: username,
-      },
-      { $set: { Password: pass } },
-      { new: true }
-    );
-
-    if (changed) {
-      return res.status(201).json({ status: "password changed successfully!" });
-    }
-
-    return res.send("Something went wrong");
-  } catch (error) {
-    res.status(501).send("error while changing password");
-    console.log(error);
-  }
-});
 // server listener
 app.listen(3000, (err) => {
   if (err) return console.log(err);

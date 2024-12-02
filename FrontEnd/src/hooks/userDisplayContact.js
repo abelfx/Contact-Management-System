@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const userDisplayContact = () => {
   const [contactNumber, setCNumber] = useState(0);
+  const [selectedId, setSelectedId] = useState(null);
 
   const displayContacts = async () => {
     let count = 1;
@@ -29,7 +30,7 @@ const userDisplayContact = () => {
           <!-- Place the Delete button inside the Notes column -->
           <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm" onclick="deleteContact('${
             contact._id
-          }')">D</button>
+          }')" onclick="handleDeleteClick(event)">D</button>
         </td>
       `;
         tableBody.appendChild(row);
@@ -41,7 +42,17 @@ const userDisplayContact = () => {
     }
   };
 
-  return { contactNumber, displayContacts };
+  const handleDeleteClick = (event) => {
+    const button = event.target;
+    const contactId = button.getAttribute("data-id");
+    setSelectedId(contactId);
+    console.log("Selected ID:", contactId);
+  };
+
+  // Attach the event listener to the window so it can access `handleDeleteClick`
+  window.handleDeleteClick = handleDeleteClick;
+
+  return { contactNumber, displayContacts, selectedId };
 };
 
 export default userDisplayContact;
