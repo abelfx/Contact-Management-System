@@ -12,14 +12,16 @@ import { useRightSide } from "../context/RightSideContext.jsx";
 import { useAccountSettingContext } from "../context/accountSettingContext.jsx";
 import useDeleteContacts from "../hooks/useDeleteContacts.js";
 import useExportContact from "../hooks/useExportContact.js";
+import { useContactContext } from "../context/contactsContext.jsx";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
   const [search, setSearch] = useState("");
-  const [userVisible, setUserVisible] = useState(false);
   const searchContact = userSearchContact();
   const { accountVisible } = useAccountSettingContext();
   const deleteContacts = useDeleteContacts();
+
+  const { userVisible } = useContactContext();
 
   const { visible, toggleFunctionality } = useRightSide();
 
@@ -35,11 +37,6 @@ const home = () => {
 
   // sets the visibillity of the delete functionality
   const [deleteVisible, setDeleteVisible] = useState(false);
-
-  // sets the visibility of the detailed user information component
-  const userToggleFunctionality = () => {
-    setUserVisible(!userVisible);
-  };
 
   const deleteAllContacts = async (e) => {
     e.preventDefault();
@@ -243,13 +240,8 @@ const home = () => {
                     <th className="border px-4 py-2">ID</th>
                     <th className="border px-4 py-2">Name</th>
                     <th className="border px-4 py-2">Phone No</th>
-                    <th
-                      onClick={userToggleFunctionality}
-                      className="border px-4 py-2"
-                    >
-                      Email
-                    </th>
-                    <th className="border px-4 py-2 text-ellipsis max-w-1 truncate">
+                    <th className="border px-4 py-2">Email</th>
+                    <th className="border px-4 py-2 text-ellipsis max-w-10">
                       Note
                     </th>
                   </tr>

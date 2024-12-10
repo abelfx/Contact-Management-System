@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { useContactContext } from "../context/contactsContext";
 
 const userDisplayContact = () => {
   const [contactNumber, setCNumber] = useState(0);
-  const [selectedId, setSelectedId] = useState(null);
+  const { setContact, userToggleFunctionality } = useContactContext();
 
   const displayContacts = async () => {
     let count = 1;
@@ -21,38 +22,39 @@ const userDisplayContact = () => {
         row.setAttribute("data-id", contact._id);
 
         row.innerHTML = `
-        <td class="border px-4 py-2">${count++}</td>
-        <td class="border px-4 py-2">${contact.FullName}</td>
-        <td class="border px-4 py-2">${contact.PhoneNumber}</td>
-        <td class="border px-4 py-2">${contact.Email}</td>
-        <td class="border px-4 py-2 relative group">
-          ${contact.Notes}
-          <!-- Place the Delete button inside the Notes column -->
-          <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm" onclick="deleteContact('${
-            contact._id
-          }')" onclick="handleDeleteClick(event)">D</button>
-        </td>
-      `;
+          <td class="border px-4 py-2">${count++}</td>
+          <td class="border px-4 py-2">${contact.FullName}</td>
+          <td class="border px-4 py-2">${contact.PhoneNumber}</td>
+          <td class="border px-4 py-2">${contact.Email}</td>
+          <td class="border px-4 py-2 relative group max-w-44 text-ellipsis truncate">
+            ${contact.Notes}
+            <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm delete-btn">
+              D
+            </button>
+          </td>
+        `;
+
+        row.addEventListener("click", () => {
+          setContact({
+            name: contact.FullName,
+            phoneNo: contact.PhoneNumber,
+            email: contact.Email,
+            notes: contact.Notes,
+          });
+
+          userToggleFunctionality();
+        });
+
         tableBody.appendChild(row);
       });
 
-      setCNumber(count - 1);
+      setCNumber(count - 1); // Update the contact number
     } catch (error) {
       console.error("Error loading data:", error);
     }
   };
 
-  const handleDeleteClick = (event) => {
-    const button = event.target;
-    const contactId = button.getAttribute("data-id");
-    setSelectedId(contactId);
-    console.log("Selected ID:", contactId);
-  };
-
-  // Attach the event listener to the window so it can access `handleDeleteClick`
-  window.handleDeleteClick = handleDeleteClick;
-
-  return { contactNumber, displayContacts, selectedId };
+  return { contactNumber, displayContacts, userToggleFunctionality };
 };
 
 export default userDisplayContact;
