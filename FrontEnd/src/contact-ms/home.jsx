@@ -11,6 +11,7 @@ import AccountSettings from "../components/accountSetting.jsx";
 import { useRightSide } from "../context/RightSideContext.jsx";
 import { useAccountSettingContext } from "../context/accountSettingContext.jsx";
 import useDeleteContacts from "../hooks/useDeleteContacts.js";
+import useExportContact from "../hooks/useExportContact.js";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
@@ -81,10 +82,10 @@ const home = () => {
                   <details>
                     <summary>Contacts</summary>
                     <ul className="bg-blue-600 rounded-t-none p-2">
-                      <li>
+                      <li onClick={useExportContact}>
                         <a>Export Contacts</a>
                       </li>
-                      <li>
+                      <li onClick={toggleFunctionality}>
                         <a>Add Contact</a>
                       </li>
                     </ul>
@@ -248,7 +249,9 @@ const home = () => {
                     >
                       Email
                     </th>
-                    <th className="border px-4 py-2">Notes</th>
+                    <th className="border px-4 py-2 text-ellipsis max-w-1 truncate">
+                      Note
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="relative"></tbody>
