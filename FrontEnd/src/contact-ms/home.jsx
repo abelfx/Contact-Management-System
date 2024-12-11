@@ -13,6 +13,7 @@ import { useAccountSettingContext } from "../context/accountSettingContext.jsx";
 import useDeleteContacts from "../hooks/useDeleteContacts.js";
 import useExportContact from "../hooks/useExportContact.js";
 import { useContactContext } from "../context/contactsContext.jsx";
+import SalesAnalytics from "../components/salesAnalytics.jsx";
 
 const home = () => {
   const { contactNumber, displayContacts } = userDisplayContact();
@@ -20,7 +21,6 @@ const home = () => {
   const searchContact = userSearchContact();
   const { accountVisible } = useAccountSettingContext();
   const deleteContacts = useDeleteContacts();
-
   const { userVisible } = useContactContext();
 
   const { visible, toggleFunctionality } = useRightSide();
@@ -310,6 +310,8 @@ const home = () => {
       >
         <AccountSettings />
       </div>
+
+      <SalesAnalytics />
     </div>
   );
 };
