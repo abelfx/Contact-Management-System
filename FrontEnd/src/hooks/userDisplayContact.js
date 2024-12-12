@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useContactContext } from "../context/contactsContext";
+import {useDeleteSingleContact} from "../hooks/useDeleteSingleContact.js";
 
 const userDisplayContact = () => {
   const [contactNumber, setCNumber] = useState(0);
-  const { setContact, userToggleFunctionality } = useContactContext();
+  const {contact, setContact, userToggleFunctionality } = useContactContext();
+  
+  const DeleteContact = useDeleteSingleContact();
 
   const displayContacts = async () => {
     let count = 1;
@@ -28,14 +31,15 @@ const userDisplayContact = () => {
           <td class="border px-4 py-2">${contact.Email}</td>
           <td class="border px-4 py-2 relative group max-w-44 text-ellipsis truncate">
             ${contact.Notes}
-            <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm delete-btn">
-              D
+            <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm delete-btn onClick = {}">
+              Delete
             </button>
           </td>
         `;
 
         row.addEventListener("click", () => {
           setContact({
+            id: contact._id,
             name: contact.FullName,
             phoneNo: contact.PhoneNumber,
             email: contact.Email,

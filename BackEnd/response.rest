@@ -74,3 +74,6 @@ Content-Type: application/json
 {
     "message": "how can i use a contact management system"
 }
+
+###
+Delete http://localhost:3000/delete/67586f33f8ee44078a361d7b

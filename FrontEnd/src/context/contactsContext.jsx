@@ -8,6 +8,7 @@ export const useContactContext = () => {
 
 export const ContactContextProvider = ({ children }) => {
   const [contact, setContact] = useState({
+    id: "",
     name: "",
     phoneNo: "",
     email: "",

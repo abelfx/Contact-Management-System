@@ -1,7 +1,23 @@
+import { useContactContext } from "../context/contactsContext";
+import Swal from "sweetalert2";
 const useDeleteSingleContact = () => {
-  const DeleteContact = async (id) => {
+  const { contact } = useContactContext();
+
+  const DeleteContact = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/${id}`, {
+      const result = await Swal.fire({
+        title: "Delete Contact?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "yes",
+        cancelButtonText: "No",
+        confirmButtonColor: "red",
+      });
+
+      if (!result.isConfirmed) {
+        return;
+      }
+      const res = await fetch(`http://localhost:3000/${contact._id}`, {
         method: "Delete",
       });
 

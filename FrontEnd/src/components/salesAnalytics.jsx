@@ -2,7 +2,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
 
 function salesAnalytics() {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   const toggleVisibility = () => {
     setVisible(!visible);
