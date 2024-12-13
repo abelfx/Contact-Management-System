@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useContactContext } from "../context/contactsContext";
-import {useDeleteSingleContact} from "../hooks/useDeleteSingleContact.js";
+import useDeleteSingleContact from "../hooks/useDeleteSingleContact.js";
 
 const userDisplayContact = () => {
   const [contactNumber, setCNumber] = useState(0);
-  const {contact, setContact, userToggleFunctionality } = useContactContext();
-  
-  const DeleteContact = useDeleteSingleContact();
+  const { setContact, userToggleFunctionality } = useContactContext();
+
+  const deleteContact = useDeleteSingleContact();
 
   const displayContacts = async () => {
     let count = 1;
@@ -31,7 +31,7 @@ const userDisplayContact = () => {
           <td class="border px-4 py-2">${contact.Email}</td>
           <td class="border px-4 py-2 relative group max-w-44 text-ellipsis truncate">
             ${contact.Notes}
-            <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm delete-btn onClick = {}">
+            <button class="absolute right-3 bottom-1 bg-red-200 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity text-sm delete-btn">
               Delete
             </button>
           </td>
@@ -47,6 +47,15 @@ const userDisplayContact = () => {
           });
 
           userToggleFunctionality();
+        });
+
+        // Delete Contacts functionality
+        const deleteButton = row.querySelector(".delete-btn");
+        deleteButton.addEventListener("click", async (event) => {
+          event.stopPropagation();
+          console.log("Contact with Id:", contact._id, "is clicked");
+          await deleteContact(contact._id);
+          displayContacts();
         });
 
         tableBody.appendChild(row);

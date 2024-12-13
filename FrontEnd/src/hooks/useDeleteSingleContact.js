@@ -1,9 +1,7 @@
-import { useContactContext } from "../context/contactsContext";
 import Swal from "sweetalert2";
+import { toast } from "react-hot-toast";
 const useDeleteSingleContact = () => {
-  const { contact } = useContactContext();
-
-  const DeleteContact = async () => {
+  const deleteContact = async (id) => {
     try {
       const result = await Swal.fire({
         title: "Delete Contact?",
@@ -17,13 +15,13 @@ const useDeleteSingleContact = () => {
       if (!result.isConfirmed) {
         return;
       }
-      const res = await fetch(`http://localhost:3000/${contact._id}`, {
+      const res = await fetch(`http://localhost:3000/delete/${id}`, {
         method: "Delete",
       });
 
       const data = await res.json();
       if (data.Status === "deleted") {
-        toast.error("Contact deleted successfully!");
+        toast.success("Contact deleted successfully!");
       } else {
         toast.error("Contact is not deleted, please try again");
       }
@@ -33,7 +31,7 @@ const useDeleteSingleContact = () => {
     }
   };
 
-  return DeleteContact;
+  return deleteContact;
 };
 
 export default useDeleteSingleContact;

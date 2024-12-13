@@ -49,10 +49,6 @@ const home = () => {
 
   useEffect(() => {
     displayContacts();
-
-    const interval = setInterval(displayContacts, 500); // Fetch every 5 seconds
-
-    return () => clearInterval(interval); // Cleanup on component unmount
   }, []);
 
   // toggle button which makes the delete window appear
